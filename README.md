@@ -8,6 +8,12 @@ A LaTeX Beamer theme that approximates the **Chalmers University of Technology 2
 
 **Project:** <https://github.com/wenlzhang/chalmers-beamer>
 **Author:** Wenliang Zhang, Chalmers University of Technology
+**Institution:** <https://www.chalmers.se/en/>
+
+### Related projects
+
+- **[ppt-to-beamer-skill](https://github.com/wenlzhang/ppt-to-beamer-skill)** — the generalised Claude Skill that built this template. Use it to convert any institution's PowerPoint master into a Beamer theme.
+- **[beamer-skill](https://github.com/wenlzhang/beamer-skill)** — a companion Claude Skill for authoring Beamer slides themselves (columns, blocks, figures, plots, citations, overlays, …) once your theme is in place.
 
 The theme is intentionally **lightweight**: a single `.sty` file defines the colour palette, fonts, frame layouts, cover, and section dividers. The accompanying `chalmers-beamer.tex` is a minimal skeleton that you can copy and adapt.
 
