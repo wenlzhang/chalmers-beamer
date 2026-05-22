@@ -20,6 +20,7 @@
 # Build output -- the rendered PDF is not tracked.  Generate it locally
 # with `pdflatex chalmers-beamer.tex` (run twice for the section TOC).
 *.pdf
+!docs/chalmers-beamer.pdf
 
 # Editor / OS junk
 .DS_Store
