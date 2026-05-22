@@ -352,20 +352,38 @@
 % -----------------------------------------------------------------------------
 % 10. Footline:  date  |  short title  |  slide number
 %     Thin purple rule above, with equal vertical padding above and below
-%     the footer text (1 mm each).  The three slots are  \insertdate  /
-%     \insertshorttitle@chalmers  /  \insertframenumber , separated by
-%     \hfill.  Reorder, swap or remove them by overriding this template
-%     in your own .tex file -- see README.
+%     the footer text (1 mm each).  The side slots are measured to the
+%     same width, so the title remains centred even when the date and
+%     page-number strings have different lengths.  Reorder, swap or
+%     remove the slots by overriding this template in your own .tex file
+%     -- see README.
 % -----------------------------------------------------------------------------
+\newlength{\Chalmersfooterleftwidth}
+\newlength{\Chalmersfooterrightwidth}
+\newlength{\Chalmersfootersidewidth}
+\newlength{\Chalmersfootertitlewidth}
+\newcommand{\Chalmersfooterrow}{%
+    \settowidth{\Chalmersfooterleftwidth}{\insertdate}%
+    \settowidth{\Chalmersfooterrightwidth}{\Chalmersinsertpagenumber}%
+    \setlength{\Chalmersfootersidewidth}{\Chalmersfooterleftwidth}%
+    \ifdim\Chalmersfooterrightwidth>\Chalmersfootersidewidth
+        \setlength{\Chalmersfootersidewidth}{\Chalmersfooterrightwidth}%
+    \fi
+    \setlength{\Chalmersfootertitlewidth}{%
+        \dimexpr\paperwidth-16mm-2\Chalmersfootersidewidth\relax}%
+    \hbox to \paperwidth{\hspace*{8mm}%
+        \makebox[\Chalmersfootersidewidth][l]{\insertdate}%
+        \makebox[\Chalmersfootertitlewidth][c]{\insertshorttitle@chalmers}%
+        \makebox[\Chalmersfootersidewidth][r]{\Chalmersinsertpagenumber}%
+        \hspace*{8mm}}%
+}
 \setbeamertemplate{footline}{%
     \hbox to \paperwidth{\hspace*{8mm}%
         {\usebeamercolor[fg]{footline}\rule{\dimexpr\paperwidth-16mm\relax}{0.3pt}}%
         \hspace*{8mm}}%
     \vspace{1mm}%
     \usebeamercolor[fg]{footline}\usebeamerfont{footline}%
-    \hbox to \paperwidth{\hspace*{8mm}%
-        \insertdate\hfill\insertshorttitle@chalmers\hfill\Chalmersinsertpagenumber%
-        \hspace*{8mm}}%
+    \Chalmersfooterrow%
     \vspace{1mm}%
 }
 

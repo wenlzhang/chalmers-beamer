@@ -100,7 +100,7 @@ Arial is the official Chalmers typeface. We approximate it with **Helvetica** vi
 - **Cover slide:** full-bleed Chalmers Purple background, white logo top-right, title / subtitle / author / institute / date stacked centre-left.
 - **Section divider:** full-bleed Chalmers Purple background, list of all sections with the current one highlighted in solid white + bold (the `progress` preset; alternatives below).
 - **Normal frame:** white background, frame title in Chalmers Purple, slim purple rule above the footer, footer in 7 pt purple.
-- **Footer (normal frames):** `<date> | <short title> | <slide number>` separated by `\hfill`.
+- **Footer (normal frames):** `<date> | <short title> | <slide number>` with equal-width side slots so the short title stays centred.
 
 ---
 
@@ -208,6 +208,8 @@ The default footer is:
 ```text
 <date>          <short title>          <slide number>
 ```
+
+The date and slide-number areas are measured as equal-width side slots, which keeps the short title centred even when one side is wider than the other.
 
 Toggle the slide-number format with `\chalmersfooterpages`:
 
