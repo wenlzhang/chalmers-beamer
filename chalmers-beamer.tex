@@ -1,0 +1,529 @@
+% =============================================================================
+%  Chalmers Beamer template -- self-documenting tutorial deck
+%
+%  Unofficial Beamer theme approximating the 2026 Chalmers visual identity.
+%  Vibe-coded by Wenliang Zhang; not an official Chalmers product.
+%
+%  Project / issue tracker:
+%      https://github.com/wenlzhang/chalmers-beamer
+%
+%  Licence: MIT for the LaTeX/Beamer code; the Chalmers logotypes in
+%           logographics/ remain Chalmers trademarks (see LICENSE +
+%           NOTICE in the repository root).
+%
+%  This file doubles as (a) a minimal compilable example you can copy as a
+%  starting point and (b) a slide-by-slide tutorial of every feature the
+%  Chalmers Beamer theme provides.  Read the rendered PDF top-to-bottom for
+%  the full guide; read this .tex file for the underlying LaTeX patterns.
+%
+%  Compile:   pdflatex your-deck.tex   (run twice -- once for the .toc,
+%                                       once to render the section dividers)
+%
+%  See README.md for an out-of-deck reference of every command.
+% =============================================================================
+
+% --- Aspect ratio (in \documentclass options) -------------------------------
+% Common Beamer aspect ratios (set via aspectratio=NNN):
+%   169  -- 16:9   (modern widescreen, matches the Chalmers PPT master)
+%   1610 -- 16:10  (older widescreen, MacBook displays)
+%   149  -- 14:9
+%   54   -- 5:4
+%   43   -- 4:3    (Beamer's default; older projectors)
+%   32   -- 3:2
+% Recommended: aspectratio=169 (the official Chalmers PPT template is 16:9).
+%
+% --- Handout / notes mode (optional) ----------------------------------------
+%   handout   -- one slide per page, all overlays collapsed
+%   trans     -- transparency mode (no overlays)
+%   notes=...  -- speaker-note rendering (see Beamer manual)
+\documentclass[aspectratio=169]{beamer}
+% \documentclass[aspectratio=169,handout]{beamer}
+% \documentclass[aspectratio=43]{beamer}
+
+\usetheme{Chalmers}
+
+% --- Common packages --------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[british]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{caption,subcaption}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,allcolors=ChalmersPurple}
+
+% --- Speaker notes -----------------------------------------------------------
+% \setbeameroption{show notes}                          % notes inline
+% \setbeameroption{show notes on second screen=right}   % presenter view
+\setbeameroption{hide notes}
+
+% =============================================================================
+%  Metadata  (used by \titlepage and the footer)
+% =============================================================================
+\title{Chalmers Beamer Template}
+\subtitle{A self-documenting tutorial deck}
+\shorttitle{Chalmers Beamer Tutorial}
+
+\author{Wenliang Zhang}
+\institute{Chalmers University of Technology}
+\date{2026-05-22}                 % ISO 8601 date format recommended
+
+% --- Logo style on every slide (optional) -----------------------------------
+% Default `logo` (avancez emblem only).  Uncomment ONE to switch:
+%   \chalmersheadline{logo}           % avancez emblem only          (DEFAULT)
+%   \chalmersheadline{word}           % CHALMERS wordmark only
+%   \chalmersheadline{logo+word}      % avancez + CHALMERS (compact)
+%   \chalmersheadline{logo+word+sub}  % avancez + CHALMERS + UNIV. OF TECH.
+
+% --- Section-divider style (optional) ---------------------------------------
+%   \chalmerssectiondividers{progress}   % all sections, current highlighted (DEFAULT)
+%   \chalmerssectiondividers{solid}      % purple full-bleed with section name
+%   \chalmerssectiondividers{none}       % no dividers (short decks)
+
+% --- Outline frame (optional) ------------------------------------------------
+%   \chalmersoutline{show}               % \outlineframe renders the TOC  (DEFAULT)
+%   \chalmersoutline{hide}               % \outlineframe is a no-op (drop the outline)
+
+% --- Page-number format in the footer (optional) -----------------------------
+%   \chalmersfooterpages{current}        % "5"        (DEFAULT)
+%   \chalmersfooterpages{both}           % "5 / 20"   (current / total)
+
+% =============================================================================
+\begin{document}
+
+% --- Cover slide ------------------------------------------------------------
+\titleframe
+
+% --- Outline ----------------------------------------------------------------
+% Hide the outline entirely by adding \chalmersoutline{hide} in the preamble.
+\outlineframe
+
+% =============================================================================
+\section{Quick start}
+% Covers: what the template provides, minimal source, file layout,
+%         the three slide types, and frame alignment options.
+% =============================================================================
+
+\begin{frame}{What this template provides}
+    \footnotesize
+    \begin{alertblock}{Unofficial template}
+        This is an \emph{unofficial} community Beamer theme that
+        approximates the 2026 Chalmers visual identity using the Chalmers logos and the official PowerPoint master as reference.
+        It is not an official Chalmers product.  For brand-critical
+        materials consult the Chalmers Brand Portal.
+    \end{alertblock}
+
+    \medskip
+    \normalsize
+
+    \begin{itemize}
+        \item Primary brand colour: \textbf{Chalmers Purple} (\texttt{\#472DBE})
+        \item Full accent palette (green, cyan, red, orange, yellow, pink, \ldots)
+        \item Three slide types: cover, section divider, normal frame
+        \item Four logo styles, three section-divider styles -- pick once,
+              applies everywhere
+        \item Arial-like typography (Helvetica via the \texttt{helvet} package)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Minimal source}
+    \scriptsize
+    \begin{verbatim}
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Chalmers}
+
+\title{...}
+\subtitle{...}
+\shorttitle{Short title for footer}
+\author{...}
+\institute{...}
+\date{2026-05-22}
+
+\begin{document}
+    \titleframe                        % cover slide
+    \begin{frame}{Outline}\tableofcontents\end{frame}
+    \section{Introduction}             % auto-inserts a divider
+    \begin{frame}{Topic}Hello, world.\end{frame}
+\end{document}
+    \end{verbatim}
+\end{frame}
+
+\begin{frame}{File layout}
+    \footnotesize
+    \begin{tabular}{@{}lp{0.55\textwidth}@{}}
+        \toprule
+        File & Purpose \\
+        \midrule
+        \texttt{beamerthemeChalmers.sty} & The theme (colours, fonts, layout) \\
+        \texttt{logographics/}           & Chalmers logos (PNG) \\
+        \texttt{your-deck.tex}           & This skeleton / tutorial deck \\
+        \texttt{README.md}               & Full command reference \\
+        \bottomrule
+    \end{tabular}
+
+    \medskip
+
+    Drop the four items into any folder, edit \texttt{your-deck.tex},
+    run \texttt{pdflatex your-deck.tex} twice (the second pass renders
+    the section dividers from the \texttt{.toc} file).
+\end{frame}
+
+% =============================================================================
+% (Slide-types content folded into Quick start)
+% =============================================================================
+
+\begin{frame}{Three built-in slide types}
+    \begin{itemize}
+        \item \textbf{Cover slide} -- purple background, white logo
+              top-right, title / subtitle / author / date.\\
+              Invoke with \texttt{\textbackslash titleframe}.
+        \item \textbf{Section divider} -- purple background, list of all
+              sections with the current one highlighted.\\
+              Inserted automatically by every \texttt{\textbackslash
+              section\{\ldots\}}.
+        \item \textbf{Normal content frame} -- white background, purple
+              title, logo top-right, footer with date $|$ short title $|$
+              slide number.
+    \end{itemize}
+
+    \medskip
+
+    For custom layouts on a purple background (e.g.\ a closing splash,
+    a hand-crafted divider) use the \texttt{chalmerscover} environment.
+\end{frame}
+
+\begin{frame}[fragile]{Custom purple frame -- \texttt{chalmerscover} env}
+    \small
+    \begin{verbatim}
+\begin{chalmerscover}
+    \vfill
+    \begin{center}
+        {\color{white}\Huge\bfseries Thank you}\\[6mm]
+        {\color{white}\Large Questions?}
+    \end{center}
+    \vfill
+\end{chalmerscover}
+    \end{verbatim}
+
+    Inside the environment you automatically get: purple background, white
+    logo in the top-right corner (same position as every other slide), no
+    footer.  Drop in any content.
+\end{frame}
+
+\begin{frame}[t]{Frame alignment options}
+    Beamer's standard \texttt{[t]}, \texttt{[c]}, \texttt{[b]} options
+    work normally with this theme:
+
+    \medskip
+
+    \begin{tabular}{@{}lp{0.65\textwidth}@{}}
+        \toprule
+        Option & Effect \\
+        \midrule
+        \texttt{[t]} & content anchored to the top of the body area \\
+        \texttt{[c]} & content vertically centred (Beamer default) \\
+        \texttt{[b]} & content anchored to the bottom \\
+        \bottomrule
+    \end{tabular}
+
+    \medskip
+
+    \textit{This very slide uses} \texttt{[t]} \textit{-- the text sits
+    just below the title.}
+\end{frame}
+
+% =============================================================================
+\section{Visual identity}
+% Covers: logos, colour palette, layout building blocks (blocks,
+%         equations, tables), and section-divider presets.
+% =============================================================================
+
+\begin{frame}[fragile]{Logo style switch}
+    \texttt{\textbackslash chalmersheadline\{\textit{key}\}} selects which
+    mark appears in the top-right corner of every slide:
+
+    \medskip
+
+    \begin{tabular}{@{}lp{0.65\textwidth}@{}}
+        \toprule
+        Key & Logo \\
+        \midrule
+        \texttt{logo}            & avancez emblem only \quad\textbf{(default)} \\
+        \texttt{word}            & CHALMERS wordmark only \\
+        \texttt{logo+word}       & avancez emblem + CHALMERS \\
+        \texttt{logo+word+sub}   & emblem + CHALMERS + UNIVERSITY OF TECHNOLOGY \\
+        \bottomrule
+    \end{tabular}
+
+    \medskip
+
+    The colour adapts automatically: purple on light slides, white on the
+    cover and section dividers.
+\end{frame}
+
+\begin{frame}{Colour palette -- primary and neutrals}
+    \footnotesize
+    \begin{tabular}{@{}llp{0.45\textwidth}@{}}
+        \toprule
+        Name & Hex & Role \\
+        \midrule
+        \texttt{ChalmersPurple}      & \#472DBE & primary; titles, bullets, rules \\
+        \texttt{ChalmersPurpleDark}  & \#332085 & dark variant (pressed states) \\
+        \texttt{ChalmersPurpleLight} & \#6746EB & lighter purple \\
+        \texttt{ChalmersPurpleSoft}  & \#9E92E8 & soft purple (backgrounds) \\
+        \texttt{ChalmersCream}       & \#F0EDE6 & warm off-white (block bodies) \\
+        \texttt{ChalmersBlack}       & \#222222 & body text \\
+        \texttt{ChalmersGrey}        & \#7F7F7F & subtitles, muted text \\
+        \bottomrule
+    \end{tabular}
+\end{frame}
+
+\begin{frame}{Colour palette -- accents (data viz)}
+    \footnotesize
+    \begin{tabular}{@{}llp{0.45\textwidth}@{}}
+        \toprule
+        Name & Hex & Suggested use \\
+        \midrule
+        \texttt{ChalmersGreen}  & \#00B356 & success, example block \\
+        \texttt{ChalmersLime}   & \#ADD739 & accent \\
+        \texttt{ChalmersCyan}   & \#36B7F6 & accent \\
+        \texttt{ChalmersTeal}   & \#61E9D2 & accent \\
+        \texttt{ChalmersRed}    & \#D52515 & alert block, warnings \\
+        \texttt{ChalmersOrange} & \#ED7122 & accent \\
+        \texttt{ChalmersYellow} & \#F6D62A & highlight \\
+        \texttt{ChalmersPink}   & \#D987BA & accent \\
+        \bottomrule
+    \end{tabular}
+
+    \medskip
+
+    All names are defined as \texttt{xcolor} colours -- use them anywhere:
+    \texttt{\textbackslash textcolor\{ChalmersGreen\}\{\ldots\}},
+    \texttt{fill=ChalmersTeal}, etc.
+\end{frame}
+
+% =============================================================================
+% (Layout building blocks -- folded into Visual identity)
+% =============================================================================
+
+\begin{frame}{Blocks}
+    \footnotesize
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.49\textwidth}
+            \begin{block}{Standard block}
+                Purple title, cream body. Use for key takeaways.
+            \end{block}
+            \begin{alertblock}{Alert block}
+                Red title, faint red body. Use for warnings.
+            \end{alertblock}
+            \begin{exampleblock}{Example block}
+                Green title, faint green body. Use for examples.
+            \end{exampleblock}
+        \end{column}
+        \begin{column}{0.49\textwidth}
+            \textbf{When to use which}
+            \begin{itemize}
+                \item Plain \texttt{block} -- summary, definition, "key idea"
+                \item \texttt{alertblock} -- caveat, exception, common mistake
+                \item \texttt{exampleblock} -- concrete instance, demo
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Equations and units}
+    Numbered equations work as usual:
+    \begin{equation}
+        \dot{\mathbf{x}} = f(\mathbf{x},\mathbf{u}),
+        \label{eq:state}
+    \end{equation}
+    where $\mathbf{x}\in\mathbb{R}^n$ is the state vector and
+    $\mathbf{u}\in\mathbb{R}^m$ is the control input.
+
+    \medskip
+
+    Units use the \texttt{siunitx} package:
+    $v_{\max} = 120 \, \operatorname{km/h}$,
+    $g = 9.81 \, \operatorname{m/s^2}$.
+
+    \medskip
+
+    Itemize bullets:
+    \begin{itemize}
+        \item Use Chalmers Purple as the bullet colour automatically.
+        \item Sub-bullets use the lighter purple variant.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Tables (booktabs style)}
+    \centering
+    \begin{tabular}{@{}lcc@{}}
+        \toprule
+        Quantity & Symbol & Value \\
+        \midrule
+        Vehicle mass    & $m$        & \SI{1500}{\kilo\gram}        \\
+        Wheelbase       & $L$        & \SI{3.0}{\meter}             \\
+        Max speed       & $v_{\max}$ & $35 \, \operatorname{m/s}$   \\
+        \bottomrule
+    \end{tabular}
+
+    \bigskip
+
+    Plain \texttt{tabular} + \texttt{booktabs} (no vertical lines, three
+    horizontal rules).  Caption goes \emph{above} the table.
+\end{frame}
+
+% =============================================================================
+% (Section dividers -- folded into Visual identity)
+% =============================================================================
+
+\begin{frame}[fragile]{Three section-divider presets}
+    Pick the look of slides inserted between sections via:
+
+    \begin{verbatim}
+\chalmerssectiondividers{progress}   % DEFAULT
+\chalmerssectiondividers{solid}
+\chalmerssectiondividers{none}
+    \end{verbatim}
+
+    \begin{tabular}{@{}lp{0.65\textwidth}@{}}
+        \toprule
+        Preset & What you see \\
+        \midrule
+        \texttt{progress} & list of all sections, current big + bold + white,
+                            others smaller and dim ("you are here") \\
+        \texttt{solid}    & purple full-bleed with just the section name \\
+        \texttt{none}     & no divider slide at all \\
+        \bottomrule
+    \end{tabular}
+\end{frame}
+
+\begin{frame}{Fully custom dividers}
+    For a one-off layout, redefine \texttt{\textbackslash AtBeginSection}
+    in your own \texttt{.tex} after \texttt{\textbackslash
+    usetheme\{Chalmers\}}.  Inside, build the divider however you like;
+    typically wrap content in \texttt{\textbackslash
+    begin\{chalmerscover\}\ldots\textbackslash end\{chalmerscover\}} to
+    keep the purple-bg + white-logo style.
+\end{frame}
+
+% =============================================================================
+\section{Customisation}
+% =============================================================================
+
+\begin{frame}[fragile]{Override colours and fonts}
+    \small
+    Place any of these \emph{after} \texttt{\textbackslash
+    usetheme\{Chalmers\}}:
+
+    \small
+    \begin{verbatim}
+% recolour the primary purple
+\definecolor{ChalmersPurple}{HTML}{332085}
+
+% recolour the frame title
+\setbeamercolor{frametitle}{fg=ChalmersBlack}
+
+% reduce the frame-title size
+\setbeamerfont{frametitle}{family=\sffamily,series=\bfseries,size=\large}
+    \end{verbatim}
+
+    The theme defines every visible element via \texttt{\textbackslash
+    setbeamercolor} / \texttt{\textbackslash setbeamerfont} so any of them
+    can be overridden in this way.
+\end{frame}
+
+\begin{frame}[fragile]{Override the footer}
+    \small
+    The default footer is \emph{date $|$ short title $|$ slide number}.
+    Override locally by redefining \texttt{footline}:
+
+    \small
+    \begin{verbatim}
+\setbeamertemplate{footline}{%
+    \usebeamercolor[fg]{footline}\usebeamerfont{footline}%
+    \vspace{1mm}%
+    \hbox to \paperwidth{\hfill\insertframenumber\hspace{8mm}}%
+    \vspace{1mm}%
+}
+    \end{verbatim}
+
+    Available macros inside the template: \texttt{\textbackslash
+    insertdate}, \texttt{\textbackslash insertshorttitle@chalmers},
+    \texttt{\textbackslash insertframenumber}, \texttt{\textbackslash
+    insertauthor}, \texttt{\textbackslash insertinstitute}.
+\end{frame}
+
+\begin{frame}[fragile]{Adding a partner logo}
+    For collaboration slides, drop the partner's PNG into
+    \texttt{logographics/} and place it manually with TikZ:
+
+    \scriptsize
+    \begin{verbatim}
+\pgfdeclareimage[height=8mm]{partner}{logographics/your-partner-logo}
+% inside any frame body:
+\begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north east,xshift=-50mm,yshift=-5mm]
+        at (current page.north east) {\pgfuseimage{partner}};
+\end{tikzpicture}
+    \end{verbatim}
+    \normalsize
+
+    Tune \texttt{xshift} so the partner logo doesn't collide with the
+    Chalmers headline logo in the top-right.
+\end{frame}
+
+% =============================================================================
+% (Wrap-up -- folded into Customisation as the last two slides)
+% =============================================================================
+
+\begin{frame}{Summary}
+    \begin{itemize}
+        \item \textbf{Identity:} the 2026 Chalmers visual identity, primary
+              colour Chalmers Purple (\texttt{\#472DBE}).
+        \item \textbf{Three slide types:} cover, section divider, normal
+              -- the logo sits at the \emph{same} top-right position on all
+              of them.
+        \item \textbf{Pick once, applies everywhere:} a single
+              \texttt{\textbackslash chalmersheadline} +
+              \texttt{\textbackslash chalmerssectiondividers} setting in the
+              preamble configures every slide.
+        \item \textbf{Customisable:} every colour and font is a Beamer
+              setting; override locally without touching the \texttt{.sty}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Further reading}
+    \begin{itemize}
+        \item \texttt{README.md} -- full command reference, colour
+              palette, customisation examples
+        \item \texttt{beamerthemeChalmers.sty} -- the theme itself,
+              well commented section-by-section
+        \item Chalmers Brand Portal -- official brand guidelines and
+              ceremonial-use rules for the avancez emblem
+    \end{itemize}
+\end{frame}
+
+% --- Closing "Thank you" slide ----------------------------------------------
+% Uses the `chalmerscover` environment: same purple-background style as
+% section pages, white logo top-right.  Replace the centred block below with
+% any custom content.  For a white-background variant, use a normal frame.
+\begin{chalmerscover}
+    \vfill
+    \begin{center}
+        {\color{white}\Huge\bfseries Thank you}\\[6mm]
+        {\color{white}\Large Questions?}\\[10mm]
+        {\color{white!85}\small Bug reports and feature ideas welcome:}\\[2mm]
+        {\small\href{https://github.com/wenlzhang/chalmers-beamer}%
+            {\color{white}\underline{github.com/wenlzhang/chalmers-beamer}}}
+    \end{center}
+    \vfill
+\end{chalmerscover}
+
+\end{document}

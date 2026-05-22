@@ -1,0 +1,29 @@
+# LaTeX auxiliary files
+*.aux
+*.log
+*.nav
+*.snm
+*.toc
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+*.lof
+*.lot
+*.idx
+*.ind
+*.ilg
+*.vrb
+
+# Build output -- the rendered PDF is not tracked.  Generate it locally
+# with `pdflatex chalmers-beamer.tex` (run twice for the section TOC).
+*.pdf
+
+# Editor / OS junk
+.DS_Store
+*.swp
+*~
+.vscode/
+.idea/
