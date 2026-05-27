@@ -115,7 +115,7 @@
 \setbeamercolor{alerted text}{fg=ChalmersRed}
 \setbeamercolor{example text}{fg=ChalmersGreen}
 
-\setbeamercolor{frametitle}{fg=ChalmersPurple,bg=white}
+\setbeamercolor{frametitle}{fg=ChalmersPurple}
 \setbeamercolor{framesubtitle}{fg=ChalmersGrey}
 
 \setbeamercolor{title}{fg=white}
@@ -135,12 +135,27 @@
 \setbeamercolor{section divider shaded}{fg=white!50}
 \setbeamercolor{section title}{fg=white}
 
-\setbeamercolor{block title}{fg=white,bg=ChalmersPurple}
-\setbeamercolor{block body}{fg=ChalmersBlack,bg=ChalmersCream}
+\setbeamercolor{block title}{parent=frametitle}
+% Block body tracks the slide background.
+\setbeamercolor{block body}{parent=normal text}
 \setbeamercolor{block title alerted}{fg=white,bg=ChalmersRed}
 \setbeamercolor{block body alerted}{fg=ChalmersBlack,bg=ChalmersRed!8}
 \setbeamercolor{block title example}{fg=white,bg=ChalmersGreen}
 \setbeamercolor{block body example}{fg=ChalmersBlack,bg=ChalmersGreen!8}
+
+\setbeamertemplate{block begin}{%
+    \ifx\insertblocktitle\@empty
+    \else
+        \par\vskip\medskipamount%
+        \begin{beamercolorbox}[colsep*=.75ex]{block title}%
+            \usebeamerfont*{block title}\insertblocktitle%
+        \end{beamercolorbox}%
+        {\parskip0pt\par}%
+    \fi
+    \usebeamerfont{block body}%
+    \begin{beamercolorbox}[colsep*=.75ex,vmode]{block body}%
+}
+\setbeamertemplate{block end}{\end{beamercolorbox}\vskip\smallskipamount}
 
 \setbeamercolor{footline}{fg=ChalmersPurple,bg=white}
 \setbeamercolor{page number in head/foot}{fg=ChalmersPurple}
@@ -149,14 +164,14 @@
 % 4.  Font sizes  (calibrated against the Chalmers PPT master:
 %     title 60pt cover / 32pt frame, body 18pt, footer 8pt)
 % -----------------------------------------------------------------------------
-\setbeamerfont{title}{family=\sffamily,series=\bfseries,size=\huge}
-\setbeamerfont{subtitle}{family=\sffamily,size=\large}
+\setbeamerfont{title}{family=\sffamily,series=\bfseries,size=\LARGE}
+\setbeamerfont{subtitle}{family=\sffamily,size=\Large}
 \setbeamerfont{author}{family=\sffamily,size=\normalsize}
 \setbeamerfont{institute}{family=\sffamily,size=\small}
 \setbeamerfont{date}{family=\sffamily,size=\small}
-\setbeamerfont{frametitle}{family=\sffamily,series=\bfseries,size=\LARGE}
+\setbeamerfont{frametitle}{family=\sffamily,series=\bfseries,size=\Large}
 \setbeamerfont{framesubtitle}{family=\sffamily,size=\normalsize}
-\setbeamerfont{block title}{family=\sffamily,series=\bfseries,size=\small}
+\setbeamerfont{block title}{family=\sffamily,series=\bfseries}
 \setbeamerfont{footline}{family=\sffamily,size=\fontsize{7pt}{8pt}\selectfont}
 \setbeamerfont{section title}{family=\sffamily,series=\bfseries,size=\huge}
 \setbeamerfont{section in toc}{family=\sffamily,size=\large}
@@ -335,7 +350,7 @@
 %         \setlength{\Chalmersframetitlebottom}{0.5mm})
 %     to adjust the title-to-body gap.
 % -----------------------------------------------------------------------------
-\newlength{\Chalmersframetitletop}    \setlength{\Chalmersframetitletop}{-2mm}
+\newlength{\Chalmersframetitletop}    \setlength{\Chalmersframetitletop}{-9mm}
 \newlength{\Chalmersframetitlebottom} \setlength{\Chalmersframetitlebottom}{-4mm}
 
 \setbeamertemplate{frametitle}{%
@@ -420,29 +435,37 @@
 % empty, this gives the cover a balanced, magazine-like layout.  Users
 % who want a fully custom layout should use the \begin{chalmerscover}
 % environment instead.
+\newcommand{\Chalmersinsertrole}{}
+\newcommand{\role}[1]{\renewcommand{\Chalmersinsertrole}{#1}}
+\newcommand{\Chalmersinsertplace}{}
+\newcommand{\place}[1]{\renewcommand{\Chalmersinsertplace}{#1}}
+
 \newcommand{\titleframe}{%
     \begin{chalmerscover}
-        % Asymmetric elastic stretch (1 : 5) anchors the title block in
-        % the upper third of the slide instead of dead-centre.  This
-        % visually pairs the text weight with the logo at top-right
-        % and stops the cover from feeling bottom-heavy.  Adjust the
-        % ratio for a stronger or gentler upward shift.
         \vskip 0pt plus 1fil
         \vspace{-6mm}
         \hspace{8mm}\begin{minipage}{0.85\paperwidth}
             \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par
             \ifx\insertsubtitle\@empty\else
-                \vspace{3mm}%
+                \vspace{1mm}%
                 \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par
             \fi
             \vspace{12mm}%
             \usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor\par
+            \ifx\Chalmersinsertrole\@empty\else
+                \vspace{1mm}%
+                \usebeamerfont{institute}\usebeamercolor[fg]{institute}\Chalmersinsertrole\par
+            \fi
             \ifx\insertinstitute\@empty\else
                 \vspace{1mm}%
                 \usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertinstitute\par
             \fi
-            \vspace{4mm}%
-            \usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate
+            \vspace{5mm}%
+            \usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate\par
+            \ifx\Chalmersinsertplace\@empty\else
+                \vspace{1mm}%
+                \usebeamerfont{date}\usebeamercolor[fg]{date}\Chalmersinsertplace\par
+            \fi
         \end{minipage}%
         \vskip 0pt plus 5fil
     \end{chalmerscover}
