@@ -272,7 +272,7 @@
 \newcommand{\Chalmerspagenumberstyle}{current}
 \newcommand{\chalmersfooterpages}[1]{\renewcommand{\Chalmerspagenumberstyle}{#1}}
 \newcommand{\Chalmersinsertpagenumber}{%
-    \ifstrequal{\Chalmerspagenumberstyle}{both}%
+    \ifdefstring{\Chalmerspagenumberstyle}{both}%
         {\insertframenumber\,/\,\inserttotalframenumber}%
         {\insertframenumber}%
 }
@@ -286,7 +286,7 @@
 \newcommand{\Chalmersoutlinestyle}{show}
 \newcommand{\chalmersoutline}[1]{\renewcommand{\Chalmersoutlinestyle}{#1}}
 \newcommand{\outlineframe}{%
-    \ifstrequal{\Chalmersoutlinestyle}{hide}{}{%
+    \ifdefstring{\Chalmersoutlinestyle}{hide}{}{%
         \begin{frame}{Outline}
             \vfill
             \hspace{8mm}\begin{minipage}{0.85\paperwidth}
@@ -301,15 +301,15 @@
 % currently selected style.  Purple variant for light slides (headline);
 % white variant for dark slides (cover, section dividers).
 \newcommand{\Chalmersinsertlogopurple}{%
-    \ifstrequal{\Chalmerslogostyle}{word}{\pgfuseimage{ChalmersWordmark}}{%
-    \ifstrequal{\Chalmerslogostyle}{logo+word}{\pgfuseimage{ChalmersLogoHoriz}}{%
-    \ifstrequal{\Chalmerslogostyle}{logo+word+sub}{\pgfuseimage{ChalmersLogo}}{%
+    \ifdefstring{\Chalmerslogostyle}{word}{\pgfuseimage{ChalmersWordmark}}{%
+    \ifdefstring{\Chalmerslogostyle}{logo+word}{\pgfuseimage{ChalmersLogoHoriz}}{%
+    \ifdefstring{\Chalmerslogostyle}{logo+word+sub}{\pgfuseimage{ChalmersLogo}}{%
         \pgfuseimage{ChalmersEmblem}}}}%
 }
 \newcommand{\Chalmersinsertlogowhite}{%
-    \ifstrequal{\Chalmerslogostyle}{word}{\pgfuseimage{ChalmersWordmarkWhite}}{%
-    \ifstrequal{\Chalmerslogostyle}{logo+word}{\pgfuseimage{ChalmersLogoHorizWhite}}{%
-    \ifstrequal{\Chalmerslogostyle}{logo+word+sub}{\pgfuseimage{ChalmersLogoWhite}}{%
+    \ifdefstring{\Chalmerslogostyle}{word}{\pgfuseimage{ChalmersWordmarkWhite}}{%
+    \ifdefstring{\Chalmerslogostyle}{logo+word}{\pgfuseimage{ChalmersLogoHorizWhite}}{%
+    \ifdefstring{\Chalmerslogostyle}{logo+word+sub}{\pgfuseimage{ChalmersLogoWhite}}{%
         \pgfuseimage{ChalmersEmblemWhite}}}}%
 }
 
@@ -617,8 +617,8 @@
 }
 
 \AtBeginSection[]{%
-    \ifstrequal{\Chalmerssectiondividerstyle}{none}{}{%
-    \ifstrequal{\Chalmerssectiondividerstyle}{solid}{\Chalmerssolidsectiondivider}{%
+    \ifdefstring{\Chalmerssectiondividerstyle}{none}{}{%
+    \ifdefstring{\Chalmerssectiondividerstyle}{solid}{\Chalmerssolidsectiondivider}{%
         \Chalmersprogresssectiondivider}}%
 }
 
