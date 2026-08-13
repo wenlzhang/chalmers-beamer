@@ -316,6 +316,37 @@ Enable notes in the preamble:
 | `\setbeameroption{show notes}`                       | notes interleaved with slides |
 | `\setbeameroption{show notes on second screen=right}`| presenter view (handout + notes) |
 
+### Two placement traps
+
+Both of these are Beamer behaviours rather than theme bugs, but they bite hardest with this theme because `\titleframe` and `\outlineframe` are whole-frame macros, so anything you write after them is outside a frame.
+
+**1. Overlay-scoped notes must live inside the frame.** `\setbeameroption{hide notes}` does *not* suppress a `\note<N>{...}` placed after `\end{frame}` — it is emitted as an extra page in the presentation PDF. An overlay-less `\note{}` is suppressed correctly in either position, which is what makes the leak easy to miss.
+
+```latex
+\begin{frame}{Some content}
+    \begin{itemize}
+        \item<1-> First
+        \item<2-> Second
+    \end{itemize}
+    \note<1>{Said while the first bullet is up.}   % correct -- inside
+    \note<2>{Said while the second bullet is up.}
+\end{frame}
+% \note<1>{...}   <- WRONG here: renders as a page in the deck
+```
+
+**2. Notes attached to `\titleframe` / `\outlineframe` cannot contain lists.** Those macros emit complete frames, so a following `\note{}` is typeset outside any frame, where Beamer's `itemize`/`enumerate` machinery is not set up. A list there fails the build with `Undefined control sequence` inside `\beamer@enum@` or `\\itemize`. Use plain paragraphs for those two notes:
+
+```latex
+\titleframe
+\note{
+    1. Opening line.\par
+    2. Second beat.\par
+    3. Third beat.
+}
+```
+
+If you want lists in every note, put the cover note on the first content frame instead.
+
 ---
 
 ## Customisation
