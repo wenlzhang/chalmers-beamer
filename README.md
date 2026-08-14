@@ -253,6 +253,51 @@ The `chalmerscover` environment gives you a purple-background frame with the whi
 
 Use it for the cover, closing slides, hand-crafted section dividers, "quote of the day" slides, etc. `\titleframe` itself is just the default layout wrapped in this environment, so you can fully replace the cover by writing your own `chalmerscover` block.
 
+### Conference cover (multi-author, with affiliations)
+
+`\titleframe` takes a single `\author`, which suits an internal talk. A conference cover usually needs the full author list with affiliation markers, a funding line and a venue line — so hand-roll it in `chalmerscover`:
+
+```latex
+\begin{chalmerscover}
+    \vskip 0pt plus 1fil
+    \hspace{8mm}\begin{minipage}{0.85\paperwidth}
+        \color{white}
+        \raggedright
+        % Long titles otherwise break mid-word ("Mo-tion").
+        \hyphenpenalty=10000 \exhyphenpenalty=10000 \tolerance=9999
+
+        \begin{Large}\textbf{Full Talk Title, Which May Run To Two Lines}\end{Large}
+
+        \vspace{6mm}
+        \begin{footnotesize}
+            \underline{Presenting Author}\textsuperscript{1},
+            Second Author\textsuperscript{1},
+            Third Author\textsuperscript{2}
+        \end{footnotesize}
+
+        \vspace{3mm}
+        \begin{scriptsize}
+            \textit{\textsuperscript{1}Department, Chalmers University of
+            Technology, Sweden\\
+            \textsuperscript{2}Department, Partner Institution, Country}
+        \end{scriptsize}
+
+        \vspace{4mm}
+        \begin{scriptsize}Funding: \textit{funder}
+        \quad$\cdot$\quad grant \textit{number}\end{scriptsize}
+
+        \vspace{3mm}
+        \begin{scriptsize}\textbf{Venue \quad$\cdot$\quad Dates
+        \quad$\cdot$\quad City, Country}\end{scriptsize}
+    \end{minipage}%
+    \vskip 0pt plus 2fil
+\end{chalmerscover}
+```
+
+The presenting author is conventionally underlined. `\color{white}` is set once for the whole block because the cover background is `ChalmersPurple`. The `\hyphenpenalty` line is the part that is easy to forget — without it a long title hyphenates across lines, which looks wrong on a cover.
+
+Keep `\title`, `\author` and `\date` set in the preamble even when you hand-roll the cover: the footline and the PDF metadata still read them.
+
 ---
 
 ## Logos
@@ -389,6 +434,43 @@ Tune `xshift` so the partner logo does not overlap the Chalmers headline logo in
 ```latex
 \documentclass[aspectratio=169,handout]{beamer}
 ```
+
+`handout` collapses every frame's overlays to a single page, so `\pause` and `<N->` stop producing sub-slides. A 90-page talk becomes a ~30-page document you can actually read.
+
+**Before switching it on**, check the deck for *exclusive* overlay patterns — `\includegraphics<2>{...}` image swaps and single-overlay `\only<2>{...}`. Handout shows every specification at once, so those **stack** on top of each other. Open-ended `\only<N->` and `\pause` collapse cleanly.
+
+#### Switching it from the command line
+
+Editing `\documentclass` by hand means you cannot build both versions from one source. `handout` is a *class* option, so it cannot be set with `\setbeameroption` the way the note states are — it has to be injected **before** `\documentclass`:
+
+```latex
+%\def\flatmode{}          % uncomment here, or pass it on the command line
+
+\ifdefined\flatmode
+    \PassOptionsToClass{handout}{beamer}
+\fi
+
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Chalmers}
+```
+
+```bash
+pdflatex talk.tex                                  # overlays, as presented
+pdflatex -jobname talk-flat "\def\flatmode{}\input{talk.tex}"   # one page per frame
+```
+
+The same `\ifdefined` trick drives the note states, giving one source and two independent axes:
+
+| | overlays | notes | use |
+|---|---|---|---|
+| *(default)* | yes | hidden | projecting |
+| `\flatmode` | no | hidden | reading, checking content, sending to a co-author |
+| `\shownotes` | yes | after each slide | rehearsing |
+| `\notesonly` | — | only notes | the spoken script alone |
+| `\presenterview` | yes | second screen | presenting from a laptop |
+
+> [!WARNING]
+> Do not combine `\flatmode` with a notes mode. With overlays collapsed, all of a frame's `\note<N>` blocks concatenate onto a **single** note page — and Beamer note pages do not paginate, so anything past the bottom is dropped silently, with nothing in the log. Frames with five or six overlays lose their last beat. Shrinking the note font postpones the truncation rather than fixing it. Keep rehearsal output on the overlay build, where each overlay gets its own note page.
 
 ---
 

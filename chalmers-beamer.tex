@@ -32,12 +32,39 @@
 %   32   -- 3:2
 % Recommended: aspectratio=169 (the official Chalmers PPT template is 16:9).
 %
-% --- Handout / notes mode (optional) ----------------------------------------
-%   handout   -- one slide per page, all overlays collapsed
-%   trans     -- transparency mode (no overlays)
-%   notes=...  -- speaker-note rendering (see Beamer manual)
+% =============================================================================
+%  BUILD SWITCHES  (see the "Build modes" slide later in this deck)
+%
+%  Two INDEPENDENT axes, each a plain Beamer mechanism:
+%
+%    overlays  \flatmode      -> the `handout' class option: one page per
+%                                frame, \pause and <N-> collapse.
+%              (default)      -> overlays as presented.
+%
+%    notes     \shownotes     -> \setbeameroption{show notes}
+%              \notesonly     -> \setbeameroption{show only notes}
+%              \presenterview -> \setbeameroption{show notes on second
+%                                screen=right}
+%              (default)      -> \setbeameroption{hide notes}
+%
+%  Uncomment one below, or leave them all commented and pass the switch on
+%  the command line so ONE source yields every version:
+%      pdflatex -jobname talk-flat "\def\flatmode{}\input{talk.tex}"
+%
+%  `handout' is a CLASS option, so it must be injected BEFORE
+%  \documentclass -- hence \PassOptionsToClass.  The note states are
+%  \setbeameroption calls and are set after \usetheme, further down.
+% =============================================================================
+%\def\flatmode{}
+%\def\shownotes{}
+%\def\notesonly{}
+%\def\presenterview{}
+
+\ifdefined\flatmode
+    \PassOptionsToClass{handout}{beamer}
+\fi
+
 \documentclass[aspectratio=169]{beamer}
-% \documentclass[aspectratio=169,handout]{beamer}
 % \documentclass[aspectratio=43]{beamer}
 
 \usetheme{Chalmers}
@@ -58,10 +85,18 @@
 \usepackage{hyperref}
 \hypersetup{colorlinks=true,allcolors=ChalmersPurple}
 
-% --- Speaker notes -----------------------------------------------------------
-% \setbeameroption{show notes}                          % notes inline
-% \setbeameroption{show notes on second screen=right}   % presenter view
-\setbeameroption{hide notes}
+% --- Speaker notes (axis 2 of 2; driven by the switches at the top) ----------
+% Beamer's four note states.  First match wins.
+\ifdefined\presenterview
+    \usepackage{pgfpages}
+    \setbeameroption{show notes on second screen=right}
+\else\ifdefined\notesonly
+    \setbeameroption{show only notes}
+\else\ifdefined\shownotes
+    \setbeameroption{show notes}
+\else
+    \setbeameroption{hide notes}
+\fi\fi\fi
 
 % =============================================================================
 %  Metadata  (used by \titlepage and the footer)
@@ -417,6 +452,96 @@
 % =============================================================================
 \section{Customisation}
 % =============================================================================
+
+% This frame deliberately carries BOTH staged overlays and a speaker note,
+% so the build modes on the next slides have something to act on: compile
+% with \flatmode and its three sub-slides become one page; compile with
+% \shownotes and the note below appears after it.
+\begin{frame}{Overlays and notes in action}
+    \begin{block}{Staged bullets}
+        \begin{itemize}
+            \item<1-> This bullet is on the first overlay
+            \item<2-> This one appears on the second
+            \item<3-> And this on the third
+        \end{itemize}
+    \end{block}
+    \begin{block}<3->{Whole-block reveal}
+        A \texttt{block} can carry an overlay specification too --- this one
+        appears with the third bullet.
+    \end{block}
+
+    % NOTE: this must sit INSIDE the frame.  An overlay-scoped
+    % \note<N>{...} placed after \end{frame} is NOT suppressed by
+    % `hide notes' and leaks into the presentation PDF as an extra page.
+    \note{
+        \begin{enumerate}
+            \item This frame is three sub-slides when built normally.
+            \item Build it with \texttt{\textbackslash flatmode} and it
+                  becomes a single page.
+            \item You are reading this because the deck was built with
+                  \texttt{\textbackslash shownotes},
+                  \texttt{\textbackslash notesonly} or
+                  \texttt{\textbackslash presenterview}.
+        \end{enumerate}
+    }
+\end{frame}
+
+\begin{frame}[fragile]{Build modes -- one source, several PDFs}
+    \small
+    Two independent axes.  Overlays are a \emph{class} option, so they are
+    injected before \texttt{\textbackslash documentclass}; the note states
+    are \texttt{\textbackslash setbeameroption} calls after
+    \texttt{\textbackslash usetheme}.
+
+    \vspace{-1mm}
+    \begin{verbatim}
+%\def\flatmode{}                      % or pass it on the command line
+\ifdefined\flatmode
+    \PassOptionsToClass{handout}{beamer}
+\fi
+\documentclass[aspectratio=169]{beamer}
+    \end{verbatim}
+    \vspace{-3mm}
+    \begin{verbatim}
+pdflatex -jobname talk-flat "\def\flatmode{}\input{talk.tex}"
+    \end{verbatim}
+    \vspace{-2mm}
+    \begin{center}
+        \scriptsize
+        \begin{tabular}{@{}llll@{}}
+            \toprule
+            Switch & Overlays & Notes & Use \\
+            \midrule
+            \emph{(none)}            & yes & hidden           & projecting \\
+            \texttt{\textbackslash flatmode}      & \textbf{no} & hidden & reading, sharing \\
+            \texttt{\textbackslash shownotes}     & yes & after each slide & rehearsing \\
+            \texttt{\textbackslash notesonly}     & --- & only notes       & spoken script \\
+            \texttt{\textbackslash presenterview} & yes & second screen    & presenting \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Build modes -- two things to watch}
+    \begin{block}{\texttt{handout} shows every overlay at once}
+        \begin{itemize}
+            \item \texttt{\textbackslash only<N->} and
+                  \texttt{\textbackslash pause} collapse cleanly
+            \item \texttt{\textbackslash includegraphics<2>} swaps and
+                  single-overlay \texttt{\textbackslash only<2>}
+                  \textbf{stack} on top of each other
+        \end{itemize}
+    \end{block}
+    \begin{block}{Do not combine \texttt{\textbackslash flatmode} with a notes mode}
+        \begin{itemize}
+            \item All of a frame's \texttt{\textbackslash note<N>} blocks
+                  land on \emph{one} note page
+            \item Beamer note pages do not paginate, so the overflow is
+                  dropped --- silently, with nothing in the log
+            \item Keep rehearsal output on the overlay build
+        \end{itemize}
+    \end{block}
+\end{frame}
 
 \begin{frame}[fragile]{Override colours and fonts}
     \small
